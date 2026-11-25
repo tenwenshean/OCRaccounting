@@ -14,9 +14,17 @@ See [PLAN.md](PLAN.md) for the tech stack, design and milestones.
 
 ## Status
 
-Milestone 1 done: app shell, on-device storage, photo → **Month/Category folders** with pictures,
-monthly totals, edit/re-categorise, summary CSV, ZIP export and PC folder sync.
-Next: live scanner with auto-crop (milestone 2), then OCR (milestone 3).
+Milestones 1–5 done:
+
+- **Live scanner**: the camera outlines the receipt, shows keywords it can read, and **captures automatically**
+  once the receipt is steady and sharp (sharpest of 3 frames). It then crops, flattens and cleans the picture.
+- **Free on-device OCR** (Tesseract.js) reads shop, date and total (`TOTAL`, `GRAND TOTAL`, `JUMLAH`, cash − change…).
+- **Auto category**: your past fixes → known Malaysian shops → keywords → learned classifier.
+  Confident receipts are filed straight into `YYYY-MM/Category`. Unsure ones go to **Review**.
+- **Review**: one tap picks the right category and the app remembers that shop next time.
+- Duplicate scans are ignored. Monthly totals, folder view, ZIP/CSV export and PC folder sync as before.
+
+Next: budgets, PaddleOCR comparison on real receipts, backup/restore.
 
 ## Run it
 

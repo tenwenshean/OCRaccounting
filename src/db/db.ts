@@ -1,5 +1,6 @@
 import Dexie, { type EntityTable } from 'dexie'
 import type { Category, MerchantRule, Receipt, Setting, Split } from './types'
+export type { Category }
 import { DEFAULT_CATEGORIES } from './defaultCategories'
 
 export class ReceiptDB extends Dexie {
@@ -17,6 +18,15 @@ export class ReceiptDB extends Dexie {
       splits: '++id, receiptId, categoryId',
       merchantRules: '++id, &pattern',
       settings: 'key',
+    })
+    // v2: add Shopping category and merge the improved default keywords
+    this.version(2).upgrade(async (tx) => {
+      const table = tx.table<Category, string>('categories')
+      for (const def of DEFAULT_CATEGORIES) {
+        const existing = await table.get(def.id)
+        if (!existing) await table.add(def)
+        else await table.update(def.id, { keywords: [...new Set([...existing.keywords, ...def.keywords])] })
+      }
     })
     this.on('populate', (tx) => {
       tx.table('categories').bulkAdd(DEFAULT_CATEGORIES)
